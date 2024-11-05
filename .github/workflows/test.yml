@@ -6,6 +6,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    environment: test
 
     steps:
       - uses: actions/checkout@v3
@@ -46,5 +47,5 @@ jobs:
             --results results/*.xml \
             -- npm run mocha-junit # Note space after --
         env:
-          TESTMO_URL: ${{ test.TESTMO_URL }}
-          TESTMO_TOKEN: ${{ test.TESTMO_TOKEN }}
+          TESTMO_URL: ${{ secrets.TESTMO_URL }}
+          TESTMO_TOKEN: ${{ secrets.TESTMO_TOKEN }}
