@@ -1,3 +1,4 @@
+# .github/workflows/test.yml
 name: Test
 
 on: [push, workflow_dispatch]
@@ -8,4 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "Hello world"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: npm
+      - run: npm ci
+      - run: npm run mocha
