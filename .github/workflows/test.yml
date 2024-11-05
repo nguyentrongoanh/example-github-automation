@@ -1,4 +1,3 @@
-# .github/workflows/test.yml
 name: Test
 
 on: [push, workflow_dispatch]
@@ -14,14 +13,36 @@ jobs:
         with:
           node-version: 19
           cache: npm
+
+      # Skip this line if not installing your own Node.js packages
       - run: npm ci
+
+      # Install Testmo CLI tool locally (then use npx testmo .. to run it)
       - run: npm install --no-save @testmo/testmo-cli
+  
+      # Check if the required variables are available
+      - run: |
+          if [[ -z "${TESTMO_URL}" ]]; then
+            echo "The TESTMO_URL secret is not defined for this repository"
+            exit 1
+          fi
+
+          if [[ -z "${TESTMO_TOKEN}" ]]; then
+            echo "The TESTMO_TOKEN secret is not defined for this repository"
+            exit 1
+          fi
+        env:
+          TESTMO_URL: ${{ secrets.TESTMO_URL }}
+          TESTMO_TOKEN: ${{ secrets.TESTMO_TOKEN }}
+
+      # Run automated tests and report results to Testmo
       - run: |
           npx testmo automation:run:submit \
             --instance "$TESTMO_URL" \
             --project-id 1 \
             --name "Mocha test run" \
             --source "unit-tests" \
+            --resources resources.json \
             --results results/*.xml \
             -- npm run mocha-junit # Note space after --
         env:
