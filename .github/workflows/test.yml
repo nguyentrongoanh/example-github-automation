@@ -56,10 +56,6 @@ jobs:
             --resources resources.json \
             --results results/*.xml \
             -- npm run mocha-junit # Note space after --
-      - run: |
-          newman run path/to/your_collection.json \
-            --reporters cli,json \
-            --reporter-json-export newman-report.json
             
         env:
           TESTMO_URL: ${{ secrets.TESTMO_URL }}
