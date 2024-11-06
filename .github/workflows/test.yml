@@ -18,6 +18,8 @@ jobs:
       # Skip this line if not installing your own Node.js packages
       - run: npm ci
 
+      - run: npm install -g newman
+
       # Install Testmo CLI tool locally (then use npx testmo .. to run it)
       - run: npm install --no-save @testmo/testmo-cli
 
@@ -54,6 +56,11 @@ jobs:
             --resources resources.json \
             --results results/*.xml \
             -- npm run mocha-junit # Note space after --
+      - run: |
+          newman run path/to/your_collection.json \
+            --reporters cli,json \
+            --reporter-json-export newman-report.json
+            
         env:
           TESTMO_URL: ${{ secrets.TESTMO_URL }}
           TESTMO_TOKEN: ${{ secrets.TESTMO_TOKEN }}
