@@ -30,6 +30,6 @@ jobs:
       # Run the Postman collection
       - name: Run Postman collection
         run: |
-          newman run path/to/your_collection.json \
+          newman run poke.json \
           --reporters cli,json \
           --reporter-json-export newman-report.json
